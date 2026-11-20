@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TechNov8 WFM — Portal Preview</title>
+  <title>TechNov8 WFM</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: #f3f4f6;
+      background: #f5f6f8;
       color: #1f2937;
     }
     .top-bar {
@@ -21,6 +21,7 @@
       align-items: center;
       justify-content: space-between;
       font-size: 14px;
+      position: relative;
     }
     .top-left {
       display: flex;
@@ -31,48 +32,81 @@
     .top-right {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
       font-size: 13px;
     }
-    .pill-btn {
-      background: rgba(255, 255, 255, 0.16);
+    .badge-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 4px;
-      padding: 4px 10px;
-      font-size: 12px;
-      cursor: pointer;
+      background: #16a34a;
     }
-    .pill-btn:hover { background: rgba(255, 255, 255, 0.25); }
+    .avatar-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #1f2937;
+      font-weight: 700;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .account-dropdown {
+      display: none;
+      position: absolute;
+      right: 16px;
+      top: 44px;
+      width: 280px;
+      background: #ffffff;
+      color: #1f2937;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+      padding: 14px;
+      z-index: 50;
+      font-size: 12px;
+    }
+    .account-dropdown.open { display: block; }
+    .account-dropdown code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #5b21b6;
+      font-weight: 700;
+    }
 
-    /* Login View */
-    .login-wrap {
+    /* Auth & Passkey Cards */
+    .center-wrap {
       min-height: calc(100vh - 46px);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
     }
-    .login-card {
+    .auth-card {
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
       background: #ffffff;
       border: 1px solid #e5e7eb;
       border-radius: 6px;
       padding: 28px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
-    .login-card h2 {
-      margin: 0 0 6px;
-      font-size: 20px;
-      color: #111827;
-    }
-    .subtitle {
-      margin: 0 0 18px;
-      font-size: 13px;
-      color: #6b7280;
-    }
-    .tabs {
+    .auth-card h2 { margin: 0 0 6px; font-size: 20px; color: #111827; }
+    .subtitle { margin: 0 0 18px; font-size: 13px; color: #6b7280; }
+    .tabs-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       border: 1px solid #d1d5db;
@@ -80,7 +114,7 @@
       overflow: hidden;
       margin-bottom: 18px;
     }
-    .tabs button {
+    .tabs-3 button {
       background: #ffffff;
       color: #374151;
       border: none;
@@ -90,39 +124,48 @@
       cursor: pointer;
       border-right: 1px solid #d1d5db;
     }
-    .tabs button:last-child { border-right: none; }
-    .tabs button.active {
-      background: #714b67;
-      color: #ffffff;
-    }
-    .field { margin-bottom: 14px; }
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #374151;
-    }
-    .field input {
+    .tabs-3 button:last-child { border-right: none; }
+    .tabs-3 button.active { background: #714b67; color: #ffffff; }
+    .field { margin-bottom: 13px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #374151; }
+    .field input, .field select {
       width: 100%;
       padding: 9px 12px;
       border: 1px solid #d1d5db;
       border-radius: 4px;
       font-size: 14px;
+      background: #fff;
     }
-    .login-submit {
-      width: 100%;
+    .btn-purple {
       background: #714b67;
       color: #ffffff;
       border: none;
       border-radius: 4px;
-      padding: 10px 14px;
-      font-size: 14px;
+      padding: 9px 16px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 4px;
     }
-    .login-submit:hover { background: #5d3c54; }
+    .btn-purple:hover { background: #5c3c54; }
+    .btn-full { width: 100%; padding: 10px 14px; font-size: 14px; }
+    .alert-err {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      border-radius: 4px;
+      padding: 9px 12px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+    .alert-ok {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      border-radius: 4px;
+      padding: 9px 12px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
     .demo-creds {
       margin-top: 14px;
       font-size: 12px;
@@ -131,44 +174,34 @@
     }
     .demo-creds span { color: #db2777; font-weight: 600; }
 
-    /* Dashboard View */
-    .app-shell {
-      display: none;
-      min-height: calc(100vh - 46px);
-    }
+    /* Portal Shell */
+    .app-shell { display: none; min-height: calc(100vh - 46px); }
     .sidebar {
-      width: 220px;
+      width: 225px;
       background: #ffffff;
       border-right: 1px solid #e5e7eb;
       padding: 18px 12px;
       flex-shrink: 0;
     }
-    .sidebar-brand { font-weight: 700; font-size: 15px; color: #111827; padding: 0 10px; }
-    .sidebar-role { font-size: 12px; color: #6b7280; padding: 2px 10px 16px; }
-    .nav-item {
+    .sidebar-title { font-size: 15px; font-weight: 700; color: #111827; padding: 0 10px; }
+    .sidebar-sub { font-size: 12px; color: #6b7280; padding: 2px 10px 16px; }
+    .nav-btn {
       display: block;
       width: 100%;
       text-align: left;
       background: transparent;
       border: none;
       border-radius: 6px;
-      padding: 9px 12px;
+      padding: 10px 12px;
       margin-bottom: 4px;
       font-size: 13px;
       color: #374151;
       cursor: pointer;
     }
-    .nav-item.active {
-      background: #714b67;
-      color: #ffffff;
-      font-weight: 600;
-    }
-    .main-content {
-      flex: 1;
-      padding: 24px 28px;
-      background: #f9fafb;
-    }
-    .welcome-row {
+    .nav-btn.active { background: #714b67; color: #ffffff; font-weight: 600; }
+
+    .main-area { flex: 1; padding: 24px 28px; background: #f8f9fa; }
+    .page-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -176,42 +209,28 @@
       gap: 12px;
       margin-bottom: 18px;
     }
-    .welcome-row h1 { margin: 0; font-size: 20px; color: #111827; }
-    .welcome-row p { margin: 4px 0 0; font-size: 12px; color: #6b7280; }
-    .action-group { display: flex; gap: 8px; }
-    .btn-dark {
-      background: #1f2937;
+    .page-head h1 { margin: 0; font-size: 20px; color: #111827; }
+    .page-head p { margin: 4px 0 0; font-size: 12px; color: #6b7280; }
+    .head-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .btn-black {
+      background: #18181b;
       color: #ffffff;
       border: none;
       border-radius: 4px;
-      padding: 7px 12px;
+      padding: 8px 14px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
-    .btn-light {
+    .btn-white {
       background: #ffffff;
       color: #1f2937;
       border: 1px solid #d1d5db;
       border-radius: 4px;
-      padding: 7px 12px;
+      padding: 8px 14px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-    }
-    .panel {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 6px;
-      padding: 18px;
-      margin-bottom: 16px;
-    }
-    .clock-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
     }
     .btn-green {
       background: #16a34a;
@@ -223,217 +242,1256 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 14px;
-      margin-bottom: 16px;
+    .btn-red {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .stat-box {
+    .card {
       background: #ffffff;
       border: 1px solid #e5e7eb;
       border-radius: 6px;
-      padding: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
     }
+    .clock-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+    .stat-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; }
     .stat-label { font-size: 12px; color: #6b7280; }
-    .stat-val { font-size: 22px; font-weight: 700; color: #111827; margin: 6px 0 4px; }
-    .stat-sub { font-size: 12px; color: #6b7280; }
-    .bottom-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    .quick-btn {
+    .stat-num { font-size: 22px; font-weight: 700; color: #111827; margin: 6px 0 4px; }
+    .stat-desc { font-size: 12px; color: #6b7280; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .quick-item {
       display: block;
       width: 100%;
       text-align: left;
       background: #ffffff;
       border: 1px solid #e5e7eb;
       border-radius: 5px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
+      padding: 11px 14px;
+      margin-bottom: 10px;
       font-size: 13px;
       font-weight: 600;
       color: #111827;
       cursor: pointer;
     }
-    .demo-banner {
-      background: #fef3c7;
-      color: #92400e;
-      font-size: 12px;
-      padding: 8px 16px;
-      text-align: center;
-      border-bottom: 1px solid #fde68a;
+    .quick-item:hover { background: #f9fafb; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+    th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid #e5e7eb; }
+    th { color: #374151; font-weight: 600; background: #f9fafb; }
+    .pill { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .pill-green { background: #dcfce7; color: #15803d; }
+    .pill-amber { background: #fef3c7; color: #b45309; }
+    .pill-purple { background: #ede9fe; color: #6d28d9; }
+    .pill-red { background: #fee2e2; color: #b91c1c; }
+
+    .emp-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
     }
-    @media (max-width: 768px) {
+    .emp-meta { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+    .form-inline { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+    .form-inline select, .form-inline input {
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #cbd5e1;
+      border-radius: 999px;
+      transition: 0.2s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+    .switch input:checked + .slider { background-color: #16a34a; }
+    .switch input:checked + .slider:before { transform: translateX(18px); }
+    .toggle-row { display: flex; align-items: center; gap: 10px; margin: 12px 0; font-size: 13px; }
+    .policy-chip {
+      display: inline-block;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin: 4px 6px 4px 0;
+      font-size: 12px;
+      background: #fff;
+    }
+    .notice-bar {
+      background: #ede9fe;
+      color: #4c1d95;
+      border: 1px solid #c4b5fd;
+      border-radius: 5px;
+      padding: 9px 14px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .denied-box {
+      background: #ffffff;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
       .app-shell { flex-direction: column; }
       .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e5e7eb; }
+      .stats-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="top-bar">
+  <header class="top-bar">
     <div class="top-left">
-      <span>⋮⋮⋮</span>
+      <span style="cursor:pointer;" onclick="returnToAuth()">⋮⋮⋮</span>
       <span>TechNov8 WFM</span>
     </div>
     <div class="top-right">
+      <span class="badge-num">7</span>
+      <span class="badge-num">10</span>
       <span>YourCompany</span>
-      <button class="pill-btn" onclick="toggleView()">Switch Login / Dashboard</button>
-      <a class="pill-btn" style="text-decoration:none;" href="https://github.com/LinconNkavi/technov8-wfm">GitHub Repo</a>
+      <button type="button" class="avatar-btn" id="avatarBtn" onclick="toggleAccountMenu()">L</button>
     </div>
-  </div>
 
-  <div class="demo-banner">
-    Interactive UI Preview of the <strong>technov8_wfm</strong> Odoo OWL Module (click <strong>Log In With Email &amp; Password</strong> or <strong>Switch Login / Dashboard</strong> to explore).
-  </div>
+    <div class="account-dropdown" id="accountDropdown">
+      <div id="dropdownContent"></div>
+    </div>
+  </header>
 
-  <!-- Login View -->
-  <div class="login-wrap" id="loginView">
-    <div class="login-card">
+  <!-- 1. AUTH SCREEN (Log In / Sign Up / Confirm Email) -->
+  <div class="center-wrap" id="authScreen">
+    <div class="auth-card">
       <h2>TechNov8 Portal</h2>
       <p class="subtitle">Sign up, confirm your email, and log in with email and password</p>
 
-      <div class="tabs">
-        <button class="active" onclick="setAuthTab(this, 'Log In')">Log In</button>
-        <button onclick="setAuthTab(this, 'Sign Up')">Sign Up</button>
-        <button onclick="setAuthTab(this, 'Confirm Email')">Confirm Email</button>
+      <div class="tabs-3">
+        <button type="button" class="active" id="tab-login" onclick="setAuthMode('login')">Log In</button>
+        <button type="button" id="tab-signup" onclick="setAuthMode('signup')">Sign Up</button>
+        <button type="button" id="tab-confirm" onclick="setAuthMode('confirm')">Confirm Email</button>
       </div>
 
-      <form onsubmit="openDashboard(event)">
+      <div class="alert-err" id="authErrorBox" style="display:none;"></div>
+      <div class="alert-ok" id="authSuccessBox" style="display:none;"></div>
+
+      <!-- Log In Form -->
+      <form id="form-login" onsubmit="submitLogin(event)">
         <div class="field">
           <label>Email</label>
-          <input type="email" id="emailInput" placeholder="lerato.dlamini@technov8.co.za" value="lerato.dlamini@technov8.co.za" />
+          <input type="email" id="loginEmailInput" value="lerato.dlamini@technov8.co.za" placeholder="lerato.dlamini@technov8.co.za" />
         </div>
         <div class="field">
           <label>Password</label>
-          <input type="password" id="passInput" placeholder="Enter password" value="Password123!" />
+          <input type="password" id="loginPassInput" value="Password123!" placeholder="Enter password" />
         </div>
-        <button type="submit" class="login-submit" id="authSubmitBtn">Log In With Email &amp; Password</button>
+        <button type="submit" class="btn-purple btn-full">Log In With Email &amp; Password</button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="form-signup" style="display:none;" onsubmit="submitSignup(event)">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="signupNameInput" placeholder="e.g. Kgomotso Molefe" />
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="signupEmailInput" placeholder="name@technov8.co.za" />
+        </div>
+        <div class="field">
+          <label>Password (min. 6 characters)</label>
+          <input type="password" id="signupPassInput" placeholder="Create password" />
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" id="signupConfirmPassInput" placeholder="Repeat password" />
+        </div>
+        <button type="submit" class="btn-purple btn-full">Create Account &amp; Send Confirmation Code</button>
+      </form>
+
+      <!-- Confirm Email Form -->
+      <form id="form-confirm" style="display:none;" onsubmit="submitConfirmEmail(event)">
+        <div class="field">
+          <label>Pending Email</label>
+          <input type="email" id="confirmEmailInput" placeholder="lerato.dlamini@technov8.co.za" />
+        </div>
+        <div class="field">
+          <label>Confirmation Code</label>
+          <input type="text" id="confirmCodeInput" placeholder="e.g. TNV-1001" />
+        </div>
+        <button type="submit" class="btn-purple btn-full">Confirm Email Address</button>
       </form>
 
       <div class="demo-creds">
-        Portal Controller: <span>lerato.dlamini@technov8.co.za</span> ? Employee: <span>naledi.mokoena@technov8.co.za / Password123!</span>
+        Portal Controller: <span>lerato.dlamini@technov8.co.za</span> / <span>Password123!</span> ? Employee: <span>naledi.mokoena@technov8.co.za / Password123!</span>
       </div>
     </div>
   </div>
 
-  <!-- Dashboard View -->
-  <div class="app-shell" id="dashboardView">
+  <!-- 2. PASS KEY GATE (shown when Pass Key confirmation is required after login) -->
+  <div class="center-wrap" id="passkeyScreen" style="display:none;">
+    <div class="auth-card">
+      <h2>Pass Key Verification</h2>
+      <p class="subtitle" id="passkeySubtitle">Enter the Pass Key code for your logged-in account to open the portal.</p>
+      <div class="alert-err" id="passkeyErrorBox" style="display:none;"></div>
+      <div class="field">
+        <label>Pass Key Code</label>
+        <input type="text" id="passkeyCodeInput" placeholder="e.g. PK-LERATO-8492" />
+      </div>
+      <button type="button" class="btn-purple btn-full" onclick="verifyPasskey()">Verify Pass Key &amp; Continue</button>
+      <div class="demo-creds" id="passkeyHintText"></div>
+      <button type="button" class="btn-white" style="margin-top:12px; width:100%;" onclick="logoutSession()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- 3. PORTAL SHELL -->
+  <div class="app-shell" id="portalShell">
     <aside class="sidebar">
-      <div class="sidebar-brand">TechNov8 Portal</div>
-      <div class="sidebar-role">Controller: Full Access &amp; Settings</div>
-      <button class="nav-item active" onclick="selectNav(this, 'Dashboard')">Dashboard</button>
-      <button class="nav-item" onclick="selectNav(this, 'Leave Management')">Leave Management</button>
-      <button class="nav-item" onclick="selectNav(this, 'Employees')">Employees</button>
-      <button class="nav-item" onclick="selectNav(this, 'Attendance')">Attendance</button>
-      <button class="nav-item" onclick="selectNav(this, 'Reports')">Reports</button>
-      <button class="nav-item" onclick="selectNav(this, 'Settings')">Settings</button>
+      <div class="sidebar-title">TechNov8 Portal</div>
+      <div class="sidebar-sub" id="sidebarRoleLabel">Controller: Full Access &amp; Settings</div>
+      <button type="button" class="nav-btn active" data-nav="dashboard" onclick="selectNav('dashboard')">Dashboard</button>
+      <button type="button" class="nav-btn" data-nav="leave" onclick="selectNav('leave')">Leave Management</button>
+      <button type="button" class="nav-btn" data-nav="employees" onclick="selectNav('employees')">Employees</button>
+      <button type="button" class="nav-btn" data-nav="attendance" onclick="selectNav('attendance')">Attendance</button>
+      <button type="button" class="nav-btn" data-nav="reports" onclick="selectNav('reports')">Reports</button>
+      <button type="button" class="nav-btn" data-nav="settings" onclick="selectNav('settings')">Settings</button>
     </aside>
 
-    <main class="main-content">
-      <div class="welcome-row">
-        <div>
-          <h1 id="sectionTitle">Welcome back, Lerato Dlamini!</h1>
-          <p>2026-11-20 ? Africa/Johannesburg (SAST)</p>
-        </div>
-        <div class="action-group">
-          <button class="btn-dark" onclick="showNotice('Viewing Dashboard')">View Dashboard</button>
-          <button class="btn-light" onclick="showNotice('Viewing My Department and Leave')">My Department and Leave</button>
-        </div>
-      </div>
-
-      <div class="panel clock-card">
-        <div>
-          <strong>Time Tracking (2026-11-20)</strong>
-          <div style="font-size:13px; color:#4b5563; margin-top:4px;">Lerato Dlamini ? Portal Controller &amp; Software Engineer (Sandton)</div>
-          <div style="font-size:12px; color:#6b7280; margin-top:2px;">Today's Status: <strong id="clockStatus">Not Clocked In Yet</strong></div>
-        </div>
-        <button class="btn-green" id="clockBtn" onclick="toggleClock()">Clock In</button>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-label">Hours Today</div>
-          <div class="stat-val" id="hoursVal">0h</div>
-          <div class="stat-sub">Working time</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Leave Balance</div>
-          <div class="stat-val">18</div>
-          <div class="stat-sub">Days remaining</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Good Records</div>
-          <div class="stat-val">3</div>
-          <div class="stat-sub">Completed clock-in &amp; out</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Portal Role</div>
-          <div class="stat-val" style="font-size:18px;">Portal Controller</div>
-          <div class="stat-sub">All Access</div>
-        </div>
-      </div>
-
-      <div class="bottom-grid">
-        <div class="panel">
-          <strong style="display:block; margin-bottom:4px;">Recent Activity</strong>
-          <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Your latest actions and updates</div>
-          <p style="font-size:13px; margin:8px 0;"><strong>Clocked in</strong><br /><span style="color:#6b7280; font-size:12px;">09:00 AM ? Sandton Gate</span></p>
-          <p style="font-size:13px; margin:8px 0;"><strong>Leave request approved</strong><br /><span style="color:#6b7280; font-size:12px;">Yesterday ? Annual Leave</span></p>
-          <p style="font-size:13px; margin:8px 0;"><strong>Facial terminal check synced</strong><br /><span style="color:#6b7280; font-size:12px;">2 days ago ? Office Biometric</span></p>
-        </div>
-
-        <div class="panel">
-          <strong style="display:block; margin-bottom:4px;">Quick Actions</strong>
-          <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Common tasks and shortcuts</div>
-          <button class="quick-btn" onclick="showNotice('Request Leave workflow opened')">Request Leave</button>
-          <button class="quick-btn" onclick="showNotice('Attendance access workflow opened')">Attendance (Request Access if Needed)</button>
-          <button class="quick-btn" onclick="showNotice('Team Directory access workflow opened')">Team Directory (Request Access if Needed)</button>
-        </div>
-      </div>
-    </main>
+    <main class="main-area" id="mainContentArea"></main>
   </div>
 
   <script>
-    let clockedIn = false;
-    function setAuthTab(btn, label) {
-      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('authSubmitBtn').textContent = label + ' With Email & Password';
+    const SECTION_LABELS = {
+      employees: "Employees",
+      attendance: "Attendance",
+      reports: "Reports",
+      settings: "Settings",
+    };
+
+    function getTodaySastDateStr() {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Africa/Johannesburg",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).formatToParts(new Date());
+      const y = parts.find((p) => p.type === "year").value;
+      const m = parts.find((p) => p.type === "month").value;
+      const d = parts.find((p) => p.type === "day").value;
+      return `${y}-${m}-${d}`;
     }
-    function openDashboard(e) {
-      e.preventDefault();
-      document.getElementById('loginView').style.display = 'none';
-      document.getElementById('dashboardView').style.display = 'flex';
+
+    function getNowSastTimeStr() {
+      return (
+        new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Africa/Johannesburg",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        }).format(new Date()) + " SAST"
+      );
     }
-    function toggleView() {
-      const login = document.getElementById('loginView');
-      const dash = document.getElementById('dashboardView');
-      if (login.style.display === 'none') {
-        login.style.display = 'flex';
-        dash.style.display = 'none';
-      } else {
-        login.style.display = 'none';
-        dash.style.display = 'flex';
+
+    function countInclusiveDays(startStr, endStr) {
+      if (!startStr || !endStr) return 0;
+      const s = new Date(`${startStr}T00:00:00`);
+      const e = new Date(`${endStr}T00:00:00`);
+      if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime()) || e < s) return 0;
+      return Math.floor((e.getTime() - s.getTime()) / 86400000) + 1;
+    }
+
+    const todayStr = getTodaySastDateStr();
+
+    const state = {
+      activeNav: "dashboard",
+      accountMenuOpen: false,
+      authMode: "login",
+      loggedInAccountId: null,
+      loggedInUserId: 1,
+      pendingConfirmEmail: "lerato.dlamini@technov8.co.za",
+      authError: "",
+      authSuccess: "",
+      passkeyError: "",
+      passkeyUnlocked: false,
+      currentDateStr: todayStr,
+      clockNotice: "",
+      leaveBalance: 18,
+      leaveType: "Annual Leave",
+      leaveDays: 2,
+      leaveNotice: "",
+      selectedEmployeeForRegisterId: 1,
+      selectedMonth: todayStr.slice(0, 7),
+      reportStartDate: todayStr,
+      reportEndDate: todayStr,
+      appliedStartDate: todayStr,
+      appliedEndDate: todayStr,
+      reportStatusMessage: "Showing latest clock-in and clock-out records.",
+      accessRequestNotice: "",
+      settingsSavedNotice: "",
+      leaveCounter: 102,
+
+      accounts: [
+        {
+          id: 1,
+          employeeId: 1,
+          name: "Lerato Dlamini",
+          email: "lerato.dlamini@technov8.co.za",
+          password: "Password123!",
+          emailConfirmed: true,
+          confirmationCode: "TNV-1001",
+          passkeyCode: "PK-LERATO-8492",
+        },
+        {
+          id: 2,
+          employeeId: 2,
+          name: "Thabo Nkosi",
+          email: "thabo.nkosi@technov8.co.za",
+          password: "Password123!",
+          emailConfirmed: true,
+          confirmationCode: "TNV-1002",
+          passkeyCode: "PK-THABO-3910",
+        },
+        {
+          id: 3,
+          employeeId: 3,
+          name: "Naledi Mokoena",
+          email: "naledi.mokoena@technov8.co.za",
+          password: "Password123!",
+          emailConfirmed: true,
+          confirmationCode: "TNV-1003",
+          passkeyCode: "PK-NALEDI-7204",
+        },
+      ],
+
+      employees: [
+        {
+          id: 1,
+          name: "Lerato Dlamini",
+          role: "Portal Controller & Software Engineer",
+          department: "Engineering",
+          email: "lerato.dlamini@technov8.co.za",
+          phone: "+27 11 555 0141",
+          location: "Sandton",
+          facialRegistered: false,
+          photoFile: "",
+          access: { dashboard: true, leave: true, employees: true, attendance: true, reports: true, settings: true },
+        },
+        {
+          id: 2,
+          name: "Thabo Nkosi",
+          role: "Systems & Infrastructure Specialist",
+          department: "IT & Operations",
+          email: "thabo.nkosi@technov8.co.za",
+          phone: "+27 41 555 0182",
+          location: "Gqeberha",
+          facialRegistered: true,
+          photoFile: "thabo_gate_face.jpg",
+          access: { dashboard: true, leave: true, employees: false, attendance: false, reports: false, settings: false },
+        },
+        {
+          id: 3,
+          name: "Naledi Mokoena",
+          role: "People & WFM Coordinator",
+          department: "People & Operations",
+          email: "naledi.mokoena@technov8.co.za",
+          phone: "+27 11 555 0195",
+          location: "WFH",
+          facialRegistered: false,
+          photoFile: "",
+          access: { dashboard: true, leave: true, employees: false, attendance: false, reports: false, settings: false },
+        },
+        {
+          id: 4,
+          name: "Sipho Khumalo",
+          role: "Line Manager - Engineering",
+          department: "Engineering",
+          email: "sipho.khumalo@technov8.co.za",
+          phone: "+27 11 555 0164",
+          location: "Sandton",
+          facialRegistered: true,
+          photoFile: "sipho_gate_face.jpg",
+          access: { dashboard: true, leave: true, employees: false, attendance: false, reports: false, settings: false },
+        },
+      ],
+
+      recentActivity: [
+        { id: 1, title: "Clocked in", subtitle: "09:00 AM · Sandton Gate" },
+        { id: 2, title: "Leave request approved", subtitle: "Yesterday · Annual Leave" },
+        { id: 3, title: "Facial terminal check synced", subtitle: "2 days ago · Office Biometric" },
+      ],
+
+      accessRequests: [],
+
+      monthlyAttendance: [
+        { id: 101, employeeId: 1, date: "2026-11-18", dayName: "Wed", status: "In Office", timeIn: "08:42:00 SAST", timeOut: "17:08:00 SAST", recordState: "Good Record", site: "Sandton" },
+        { id: 102, employeeId: 1, date: "2026-11-19", dayName: "Thu", status: "In Office", timeIn: "08:50:00 SAST", timeOut: "17:12:00 SAST", recordState: "Good Record", site: "Sandton" },
+        { id: 103, employeeId: 1, date: "2026-11-04", dayName: "Wed", status: "Day Off", timeIn: "-", timeOut: "-", recordState: "Approved Leave", site: "Approved Leave" },
+        { id: 104, employeeId: 1, date: "2026-11-05", dayName: "Thu", status: "In Office", timeIn: "08:38:00 SAST", timeOut: "17:05:00 SAST", recordState: "Good Record", site: "Sandton" },
+        { id: 105, employeeId: 1, date: "2026-11-06", dayName: "Fri", status: "Absent", timeIn: "-", timeOut: "-", recordState: "Unscheduled Absence", site: "Unscheduled Absence" },
+        { id: 106, employeeId: 2, date: "2026-11-19", dayName: "Thu", status: "In Office", timeIn: "08:45:00 SAST", timeOut: "17:04:00 SAST", recordState: "Good Record", site: "Gqeberha" },
+        { id: 107, employeeId: 3, date: "2026-11-19", dayName: "Thu", status: "Day Off", timeIn: "-", timeOut: "-", recordState: "Approved Leave", site: "WFH" },
+      ],
+
+      leaveRequests: [
+        {
+          ref: "LV-101",
+          employeeName: "Lerato Dlamini",
+          type: "Annual Leave",
+          days: 2,
+          department: "Engineering",
+          specialistStatus: "Specialist Approved",
+          managerStatus: "Line Manager Approved",
+          finalStatus: "Approved",
+        },
+      ],
+
+      settings: {
+        singleClockInPerDay: true,
+        requireClockOutForGoodRecord: true,
+        lateGraceMinutes: 15,
+        biometricWebhookUrl: "/technov8/biometric/scan",
+        autoSyncBiometricPunches: true,
+        routeLeaveToSpecialistFirst: true,
+        requireLineManagerAfterSpecialist: true,
+        defaultReportRange: "today",
+        includeIncompleteInExcel: true,
+        requirePasskeyAfterLogin: false,
+        timezone: "Africa/Johannesburg (SAST)",
+      },
+    };
+
+    function reconcileMissedClockOuts() {
+      for (const row of state.monthlyAttendance) {
+        if (row.date < state.currentDateStr && row.timeIn !== "-" && row.timeOut === "-") {
+          row.recordState = "Not Updated (Missed Clock Out)";
+        }
       }
     }
-    function selectNav(btn, name) {
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('sectionTitle').textContent = name === 'Dashboard'
-        ? 'Welcome back, Lerato Dlamini!'
-        : name;
+
+    function currentAccount() {
+      return state.accounts.find((a) => a.id === state.loggedInAccountId) || null;
     }
-    function toggleClock() {
-      clockedIn = !clockedIn;
-      document.getElementById('clockStatus').textContent = clockedIn ? 'Clocked In' : 'Not Clocked In Yet';
-      document.getElementById('clockBtn').textContent = clockedIn ? 'Clock Out' : 'Clock In';
-      document.getElementById('hoursVal').textContent = clockedIn ? '1h' : '0h';
+
+    function loggedInEmployee() {
+      return state.employees.find((e) => e.id === state.loggedInUserId) || state.employees[0];
     }
-    function showNotice(msg) {
-      alert(msg + ' (Interactive preview on GitHub Pages)');
+
+    function isLeratoController() {
+      const emp = loggedInEmployee();
+      return Boolean(emp && (emp.id === 1 || emp.email.toLowerCase() === "lerato.dlamini@technov8.co.za"));
     }
+
+    function hasDirectAccess(sectionKey) {
+      if (sectionKey === "dashboard" || sectionKey === "leave") return true;
+      if (isLeratoController()) return true;
+      const emp = loggedInEmployee();
+      return Boolean(emp && emp.access && emp.access[sectionKey]);
+    }
+
+    function todayAttendanceRecord() {
+      reconcileMissedClockOuts();
+      return state.monthlyAttendance.find(
+        (r) => r.employeeId === state.loggedInUserId && r.date === state.currentDateStr
+      ) || null;
+    }
+
+    function todayClockStage() {
+      const rec = todayAttendanceRecord();
+      if (!rec) return "not_clocked_in";
+      if (rec.timeIn !== "-" && rec.timeOut === "-") return "clocked_in_awaiting_out";
+      return "completed_today";
+    }
+
+    function setAuthMode(mode) {
+      state.authMode = mode;
+      state.authError = "";
+      state.authSuccess = "";
+      renderScreens();
+    }
+
+    function submitLogin(e) {
+      e.preventDefault();
+      state.authError = "";
+      state.authSuccess = "";
+      const email = document.getElementById("loginEmailInput").value.trim().toLowerCase();
+      const pass = document.getElementById("loginPassInput").value;
+      const acct = state.accounts.find((a) => a.email.toLowerCase() === email);
+      if (!acct) {
+        state.authError = "Account not found. Sign up first or use a demo account.";
+        renderScreens();
+        return;
+      }
+      if (!acct.emailConfirmed) {
+        state.pendingConfirmEmail = acct.email;
+        state.authMode = "confirm";
+        state.authError = "Confirm your email address before logging in.";
+        renderScreens();
+        return;
+      }
+      if (acct.password !== pass) {
+        state.authError = "Incorrect password.";
+        renderScreens();
+        return;
+      }
+      state.loggedInAccountId = acct.id;
+      state.loggedInUserId = acct.employeeId;
+      state.activeNav = "dashboard";
+      state.passkeyUnlocked = !state.settings.requirePasskeyAfterLogin;
+      state.passkeyError = "";
+      state.accountMenuOpen = false;
+      renderScreens();
+    }
+
+    function submitSignup(e) {
+      e.preventDefault();
+      state.authError = "";
+      state.authSuccess = "";
+      const name = document.getElementById("signupNameInput").value.trim();
+      const email = document.getElementById("signupEmailInput").value.trim().toLowerCase();
+      const pass = document.getElementById("signupPassInput").value;
+      const confirm = document.getElementById("signupConfirmPassInput").value;
+      if (!name || !email || !pass) {
+        state.authError = "Please enter your name, email, and password.";
+        renderScreens();
+        return;
+      }
+      if (pass.length < 6) {
+        state.authError = "Password must be at least 6 characters.";
+        renderScreens();
+        return;
+      }
+      if (pass !== confirm) {
+        state.authError = "Passwords do not match.";
+        renderScreens();
+        return;
+      }
+      if (state.accounts.some((a) => a.email.toLowerCase() === email)) {
+        state.authError = "An account with this email already exists.";
+        renderScreens();
+        return;
+      }
+      const empId = state.employees.length + 1;
+      state.employees.push({
+        id: empId,
+        name,
+        role: "Team Member",
+        department: "Engineering",
+        email,
+        phone: "+27 11 555 0199",
+        location: "Sandton",
+        facialRegistered: false,
+        photoFile: "",
+        access: { dashboard: true, leave: true, employees: false, attendance: false, reports: false, settings: false },
+      });
+      const code = `TNV-${Math.floor(1000 + Math.random() * 9000)}`;
+      const prefix = name.replace(/[^A-Za-z]/g, "").toUpperCase().slice(0, 6) || "USER";
+      state.accounts.push({
+        id: state.accounts.length + 1,
+        employeeId: empId,
+        name,
+        email,
+        password: pass,
+        emailConfirmed: false,
+        confirmationCode: code,
+        passkeyCode: `PK-${prefix}-${Math.floor(1000 + Math.random() * 9000)}`,
+      });
+      state.pendingConfirmEmail = email;
+      state.authMode = "confirm";
+      state.authSuccess = `Account created for ${email}. Confirm with code ${code}.`;
+      renderScreens();
+    }
+
+    function submitConfirmEmail(e) {
+      e.preventDefault();
+      state.authError = "";
+      state.authSuccess = "";
+      const email = document.getElementById("confirmEmailInput").value.trim().toLowerCase();
+      const code = document.getElementById("confirmCodeInput").value.trim();
+      const acct = state.accounts.find((a) => a.email.toLowerCase() === email);
+      if (!acct) {
+        state.authError = "No account found with that email.";
+        renderScreens();
+        return;
+      }
+      if (code !== acct.confirmationCode) {
+        state.authError = `Invalid code. Use ${acct.confirmationCode}.`;
+        renderScreens();
+        return;
+      }
+      acct.emailConfirmed = true;
+      state.authMode = "login";
+      state.authSuccess = `Email confirmed for ${acct.email}. You can log in now.`;
+      renderScreens();
+    }
+
+    function verifyPasskey() {
+      const acct = currentAccount();
+      const entered = document.getElementById("passkeyCodeInput").value.trim();
+      if (!acct || entered !== acct.passkeyCode) {
+        state.passkeyError = "Pass Key code does not match this account.";
+        renderScreens();
+        return;
+      }
+      state.passkeyUnlocked = true;
+      state.passkeyError = "";
+      renderScreens();
+    }
+
+    function logoutSession() {
+      state.loggedInAccountId = null;
+      state.passkeyUnlocked = false;
+      state.accountMenuOpen = false;
+      state.authMode = "login";
+      renderScreens();
+    }
+
+    function returnToAuth() {
+      if (!state.loggedInAccountId) return;
+      state.accountMenuOpen = false;
+      renderScreens();
+    }
+
+    function toggleAccountMenu() {
+      state.accountMenuOpen = !state.accountMenuOpen;
+      renderDropdown();
+    }
+
+    function switchDemoUser(empId) {
+      const acct = state.accounts.find((a) => a.employeeId === empId);
+      state.loggedInUserId = empId;
+      state.loggedInAccountId = acct ? acct.id : null;
+      state.activeNav = "dashboard";
+      state.accountMenuOpen = false;
+      state.passkeyUnlocked = true;
+      renderScreens();
+    }
+
+    function selectNav(navKey) {
+      state.activeNav = navKey;
+      state.accountMenuOpen = false;
+      renderScreens();
+    }
+
+    function handleClockIn() {
+      state.clockNotice = "";
+      if (state.settings.singleClockInPerDay && todayClockStage() !== "not_clocked_in") {
+        state.clockNotice = "You have already clocked in today. Wait until the following day to clock in again.";
+        renderScreens();
+        return;
+      }
+      const nowTime = getNowSastTimeStr();
+      const emp = loggedInEmployee();
+      state.monthlyAttendance.unshift({
+        id: Date.now(),
+        employeeId: emp.id,
+        date: state.currentDateStr,
+        dayName: new Date(`${state.currentDateStr}T08:00:00`).toLocaleDateString("en-US", { weekday: "short" }),
+        status: "In Office",
+        timeIn: nowTime,
+        timeOut: "-",
+        recordState: state.settings.requireClockOutForGoodRecord ? "Pending Clock Out (Must Clock Out Today)" : "Good Record",
+        site: emp.location,
+      });
+      state.clockNotice = `Clocked in at ${nowTime}. Clock out today to save a Good Record.`;
+      state.recentActivity.unshift({ id: Date.now(), title: `Clocked in at ${nowTime}`, subtitle: `${emp.name} · ${emp.location}` });
+      renderScreens();
+    }
+
+    function handleClockOut() {
+      state.clockNotice = "";
+      const rec = todayAttendanceRecord();
+      if (!rec || rec.timeOut !== "-") {
+        state.clockNotice = "No open clock-in found for today.";
+        renderScreens();
+        return;
+      }
+      const nowTime = getNowSastTimeStr();
+      rec.timeOut = nowTime;
+      rec.recordState = "Good Record";
+      state.clockNotice = `Clocked out at ${nowTime}. Saved as a Good Record.`;
+      state.recentActivity.unshift({ id: Date.now(), title: `Clocked out at ${nowTime} (Good Record)`, subtitle: `${loggedInEmployee().name} · ${loggedInEmployee().location}` });
+      renderScreens();
+    }
+
+    function submitLeave(e) {
+      e.preventDefault();
+      const type = document.getElementById("leaveTypeSelect").value;
+      const days = Math.max(1, parseInt(document.getElementById("leaveDaysInput").value, 10) || 1);
+      const emp = loggedInEmployee();
+      const ref = `LV-${state.leaveCounter++}`;
+      state.leaveRequests.unshift({
+        ref,
+        employeeName: emp.name,
+        type,
+        days,
+        department: emp.department,
+        specialistStatus: state.settings.routeLeaveToSpecialistFirst ? "Waiting for Approval" : "Specialist Approved",
+        managerStatus: state.settings.requireLineManagerAfterSpecialist ? "Pending Specialist" : "Line Manager Approved",
+        finalStatus: "In Progress",
+      });
+      state.leaveBalance = Math.max(0, state.leaveBalance - days);
+      state.leaveNotice = `Submitted ${ref} (${type}, ${days} day(s)) for ${emp.name}.`;
+      renderScreens();
+    }
+
+    function registerSelectedFace() {
+      const selId = parseInt(document.getElementById("faceEmployeeSelect").value, 10);
+      const emp = state.employees.find((e) => e.id === selId);
+      if (!emp) return;
+      emp.facialRegistered = true;
+      emp.photoFile = `${emp.name.toLowerCase().split(" ")[0]}_gate_face.jpg`;
+      renderScreens();
+    }
+
+    function requestSectionAccess(sectionKey) {
+      const emp = loggedInEmployee();
+      const label = SECTION_LABELS[sectionKey] || sectionKey;
+      const existing = state.accessRequests.find((r) => r.employeeId === emp.id && r.sectionKey === sectionKey);
+      if (existing) {
+        existing.status = "Pending";
+        existing.requestedAt = getNowSastTimeStr();
+      } else {
+        state.accessRequests.unshift({
+          id: Date.now(),
+          employeeId: emp.id,
+          employeeName: emp.name,
+          sectionKey,
+          sectionLabel: label,
+          status: "Pending",
+          requestedAt: getNowSastTimeStr(),
+        });
+      }
+      state.accessRequestNotice = `Access request for ${label} sent to Lerato Dlamini · Status: Pending.`;
+      renderScreens();
+    }
+
+    function decideAccessRequest(reqId, approve) {
+      if (!isLeratoController()) return;
+      const req = state.accessRequests.find((r) => r.id === reqId);
+      if (!req) return;
+      req.status = approve ? "Approved" : "Denied";
+      const emp = state.employees.find((e) => e.id === req.employeeId);
+      if (emp && emp.access) {
+        emp.access[req.sectionKey] = Boolean(approve);
+      }
+      renderScreens();
+    }
+
+    function generateReportView() {
+      state.reportStartDate = document.getElementById("reportFromInput").value;
+      state.reportEndDate = document.getElementById("reportToInput").value;
+      state.appliedStartDate = state.reportStartDate;
+      state.appliedEndDate = state.reportEndDate;
+      state.reportStatusMessage = "Report updated with latest clock-in and clock-out records.";
+      renderScreens();
+    }
+
+    function setTodayReportRange() {
+      state.reportStartDate = state.currentDateStr;
+      state.reportEndDate = state.currentDateStr;
+      state.appliedStartDate = state.currentDateStr;
+      state.appliedEndDate = state.currentDateStr;
+      renderScreens();
+    }
+
+    function exportReportXls() {
+      reconcileMissedClockOuts();
+      const rows = state.monthlyAttendance.filter(
+        (r) => r.date >= state.appliedStartDate && r.date <= state.appliedEndDate
+      );
+      let csv = "Employee,Role,Date,Status,Check In,Check Out,Record State,Site\n";
+      rows.forEach((r) => {
+        const emp = state.employees.find((e) => e.id === r.employeeId) || { name: "Employee", role: "" };
+        csv += `"${emp.name}","${emp.role}","${r.date}","${r.status}","${r.timeIn}","${r.timeOut}","${r.recordState}","${r.site}"\n`;
+      });
+      const blob = new Blob([csv], { type: "application/vnd.ms-excel;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `technov8_attendance_${state.appliedStartDate}_to_${state.appliedEndDate}.xls`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function toggleSettingKey(key) {
+      if (!isLeratoController()) return;
+      state.settings[key] = !state.settings[key];
+      if (key === "requirePasskeyAfterLogin" && state.settings.requirePasskeyAfterLogin) {
+        state.passkeyUnlocked = false;
+      }
+      state.settingsSavedNotice = `Updated setting at ${getNowSastTimeStr()}.`;
+      renderScreens();
+    }
+
+    function renderDropdown() {
+      const dd = document.getElementById("accountDropdown");
+      dd.classList.toggle("open", state.accountMenuOpen);
+      const acct = currentAccount();
+      const emp = loggedInEmployee();
+      document.getElementById("dropdownContent").innerHTML = `
+        <div style="font-weight:700; font-size:13px; margin-bottom:4px;">${emp.name}</div>
+        <div style="color:#6b7280; margin-bottom:8px;">${emp.role}</div>
+        ${acct ? `<div style="margin-bottom:8px;">Pass Key: <code>${acct.passkeyCode}</code></div>` : ""}
+        <div style="font-weight:600; margin-bottom:6px;">Quick Demo Switch:</div>
+        <button type="button" class="btn-white" style="width:100%; margin-bottom:5px; text-align:left;" onclick="switchDemoUser(1)">Lerato Dlamini (Portal Controller)</button>
+        <button type="button" class="btn-white" style="width:100%; margin-bottom:8px; text-align:left;" onclick="switchDemoUser(3)">Naledi Mokoena (Employee / Denied Access Demo)</button>
+        <button type="button" class="btn-purple" style="width:100%;" onclick="logoutSession()">Log Out</button>
+      `;
+    }
+
+    function renderDeniedSection(sectionKey) {
+      const label = SECTION_LABELS[sectionKey] || sectionKey;
+      const emp = loggedInEmployee();
+      const existingReq = state.accessRequests.find((r) => r.employeeId === emp.id && r.sectionKey === sectionKey);
+      return `
+        <div class="page-head">
+          <div>
+            <h1>${label} — Access Restricted</h1>
+            <p>${emp.name} · ${emp.role}</p>
+          </div>
+        </div>
+        ${state.accessRequestNotice ? `<div class="alert-ok">${state.accessRequestNotice}</div>` : ""}
+        <div class="denied-box">
+          <div class="pill pill-red" style="margin-bottom:8px;">Denied Access</div>
+          <h3 style="margin:6px 0;">You do not have direct access to ${label}</h3>
+          <p style="font-size:13px; color:#4b5563;">Standard employees have direct access to Dashboard and Leave Management. Request access below to route an approval request to Portal Controller Lerato Dlamini.</p>
+          <button type="button" class="btn-purple" onclick="requestSectionAccess('${sectionKey}')">
+            ${existingReq ? "Resend Request Access" : "Request Access"}
+          </button>
+          ${existingReq ? `<span style="margin-left:12px; font-size:12px; font-weight:600; color:#b45309;">Current Status: ${existingReq.status} (${existingReq.requestedAt})</span>` : ""}
+        </div>
+      `;
+    }
+
+    function renderMainArea() {
+      const emp = loggedInEmployee();
+      const nav = state.activeNav;
+      const area = document.getElementById("mainContentArea");
+
+      if (nav !== "dashboard" && nav !== "leave" && !hasDirectAccess(nav)) {
+        area.innerHTML = renderDeniedSection(nav);
+        return;
+      }
+
+      if (nav === "dashboard") {
+        const stage = todayClockStage();
+        const hoursLabel = stage === "not_clocked_in" ? "0h" : stage === "clocked_in_awaiting_out" ? "In Progress" : "8h";
+        const statusLabel = stage === "not_clocked_in" ? "Not Clocked In Yet" : stage === "clocked_in_awaiting_out" ? "Clocked In (Awaiting Clock Out)" : "Completed Today (Good Record)";
+        const goodCount = state.monthlyAttendance.filter((r) => r.employeeId === emp.id && r.recordState === "Good Record").length;
+
+        const pendingRequestsHtml = isLeratoController() && state.accessRequests.length
+          ? `<div class="card">
+              <strong>Access Requests Queue (Portal Controller)</strong>
+              <table>
+                <thead><tr><th>Employee</th><th>Section</th><th>Requested</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody>
+                  ${state.accessRequests.map((req) => `
+                    <tr>
+                      <td><strong>${req.employeeName}</strong></td>
+                      <td>${req.sectionLabel}</td>
+                      <td>${req.requestedAt}</td>
+                      <td><span class="pill ${req.status === "Approved" ? "pill-green" : req.status === "Denied" ? "pill-red" : "pill-amber"}">${req.status}</span></td>
+                      <td>
+                        <button type="button" class="btn-green" style="padding:5px 10px; font-size:11px;" onclick="decideAccessRequest(${req.id}, true)">Approve</button>
+                        <button type="button" class="btn-red" style="padding:5px 10px; font-size:11px;" onclick="decideAccessRequest(${req.id}, false)">Deny</button>
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>`
+          : "";
+
+        area.innerHTML = `
+          <div class="page-head">
+            <div>
+              <h1>Welcome back, ${emp.name}!</h1>
+              <p>${state.currentDateStr} ? ${state.settings.timezone}</p>
+            </div>
+            <div class="head-actions">
+              <button type="button" class="btn-black" onclick="selectNav('dashboard')">View Dashboard</button>
+              <button type="button" class="btn-white" onclick="selectNav('leave')">My Department and Leave</button>
+            </div>
+          </div>
+
+          ${state.clockNotice ? `<div class="alert-ok">${state.clockNotice}</div>` : ""}
+
+          <div class="card clock-row">
+            <div>
+              <strong>Time Tracking (${state.currentDateStr})</strong>
+              <div style="font-size:13px; color:#4b5563; margin-top:4px;">${emp.name} ? ${emp.role} (${emp.location})</div>
+              <div style="font-size:12px; color:#6b7280; margin-top:2px;">Today's Status: <strong>${statusLabel}</strong></div>
+            </div>
+            <div class="head-actions">
+              <button type="button" class="btn-green" onclick="handleClockIn()">Clock In</button>
+              <button type="button" class="btn-white" onclick="handleClockOut()">Clock Out</button>
+            </div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-label">Hours Today</div><div class="stat-num">${hoursLabel}</div><div class="stat-desc">Working time</div></div>
+            <div class="stat-card"><div class="stat-label">Leave Balance</div><div class="stat-num">${state.leaveBalance}</div><div class="stat-desc">Days remaining</div></div>
+            <div class="stat-card"><div class="stat-label">Good Records</div><div class="stat-num">${goodCount}</div><div class="stat-desc">Completed clock-in &amp; out</div></div>
+            <div class="stat-card"><div class="stat-label">Portal Role</div><div class="stat-num" style="font-size:18px;">${isLeratoController() ? "Portal Controller" : "Employee"}</div><div class="stat-desc">${isLeratoController() ? "All Access" : "Dashboard & Leave"}</div></div>
+          </div>
+
+          ${pendingRequestsHtml}
+
+          <div class="two-col">
+            <div class="card">
+              <strong>Recent Activity</strong>
+              <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Your latest actions and updates</div>
+              ${state.recentActivity.slice(0, 5).map((a) => `
+                <p style="font-size:13px; margin:8px 0;"><strong>${a.title}</strong><br /><span style="color:#6b7280; font-size:12px;">${a.subtitle}</span></p>
+              `).join("")}
+            </div>
+            <div class="card">
+              <strong>Quick Actions</strong>
+              <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Common tasks and shortcuts</div>
+              <button type="button" class="quick-item" onclick="selectNav('leave')">Request Leave</button>
+              <button type="button" class="quick-item" onclick="selectNav('attendance')">Attendance (Request Access if Needed)</button>
+              <button type="button" class="quick-item" onclick="selectNav('employees')">Team Directory (Request Access if Needed)</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      if (nav === "leave") {
+        area.innerHTML = `
+          <div class="page-head">
+            <div>
+              <h1>Leave Management ? ${emp.name}</h1>
+              <p>Apply for leave and track Specialist approval, Line Manager approval, and final status</p>
+            </div>
+            <div class="head-actions">
+              <button type="button" class="btn-black" onclick="document.getElementById('leaveDaysInput').focus()">Apply Leave Management</button>
+            </div>
+          </div>
+          ${state.leaveNotice ? `<div class="alert-ok">${state.leaveNotice}</div>` : ""}
+          <div class="card">
+            <strong>Apply Leave and Approval Status</strong>
+            <div style="font-size:12px; color:#6b7280; margin-top:4px;">Applications move to the Specialist to wait for approval before Line Manager and final decision</div>
+            <form class="form-inline" onsubmit="submitLeave(event)">
+              <select id="leaveTypeSelect">
+                <option value="Annual Leave">Annual Leave</option>
+                <option value="Sick Leave">Sick Leave</option>
+                <option value="Family Responsibility Leave">Family Responsibility Leave</option>
+              </select>
+              <input type="number" id="leaveDaysInput" min="1" max="30" value="${state.leaveDays}" style="width:75px;" />
+              <button type="submit" class="btn-purple">Apply Leave</button>
+            </form>
+            <table>
+              <thead>
+                <tr><th>Reference &amp; Employee</th><th>Leave Type &amp; Days</th><th>Specialist Approval</th><th>Line Manager Approval</th><th>Approved / Rejected</th></tr>
+              </thead>
+              <tbody>
+                ${state.leaveRequests.map((lr) => `
+                  <tr>
+                    <td><strong>${lr.ref} ? ${lr.employeeName}</strong><br /><span style="color:#6b7280; font-size:12px;">${lr.department}</span></td>
+                    <td><strong>${lr.type}</strong><br /><span style="color:#6b7280; font-size:12px;">${lr.days} day(s)</span></td>
+                    <td><span class="pill pill-green">${lr.specialistStatus}</span></td>
+                    <td><span class="pill pill-green">${lr.managerStatus}</span></td>
+                    <td><span class="pill pill-green">${lr.finalStatus}</span></td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+        return;
+      }
+
+      if (nav === "employees") {
+        area.innerHTML = `
+          <div class="page-head">
+            <div>
+              <h1>TechNov8 Workforce Directory</h1>
+              <p>Manage employee roles, personal details, facial registration, and access rights</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="form-inline" style="margin-top:0; justify-content:space-between;">
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <select id="faceEmployeeSelect">
+                  ${state.employees.map((e) => `<option value="${e.id}">${e.name} (${e.facialRegistered ? "Registered" : "Not Registered"})</option>`).join("")}
+                </select>
+                <button type="button" class="btn-purple" onclick="registerSelectedFace()">Register Facial Photo</button>
+              </div>
+              <span style="font-size:12px; color:#6b7280;">Office gate biometric time-in &amp; time-out</span>
+            </div>
+          </div>
+          ${state.employees.map((e) => `
+            <div class="emp-card">
+              <div>
+                <div class="emp-meta">Role</div>
+                <strong style="font-size:15px;">${e.name}</strong><br />
+                <span style="color:#6d28d9; font-size:13px; font-weight:500;">${e.role}</span><br />
+                <span style="color:#6b7280; font-size:12px;">${e.department}</span>
+              </div>
+              <div>
+                <div class="emp-meta">Personal Details</div>
+                <div style="font-size:13px;">Location: <strong>${e.location}</strong></div>
+                <div style="font-size:13px;">Email: <strong>${e.email}</strong></div>
+                <div style="font-size:13px;">Phone: <strong>${e.phone}</strong></div>
+              </div>
+              <div>
+                <div class="emp-meta">Facial Registration</div>
+                ${e.facialRegistered
+                  ? `<span class="pill pill-green">Registered</span><div style="font-size:12px; color:#6b7280; margin-top:6px;">Photo: ${e.photoFile}</div>`
+                  : `<span class="pill pill-amber">Not Registered</span><div style="font-size:12px; color:#6b7280; margin-top:6px;">Pending gate biometric photo upload</div>`}
+              </div>
+            </div>
+          `).join("")}
+        `;
+        return;
+      }
+
+      if (nav === "attendance") {
+        reconcileMissedClockOuts();
+        const rows = state.monthlyAttendance.filter((r) => r.employeeId === emp.id);
+        const good = rows.filter((r) => r.recordState === "Good Record").length;
+        const off = rows.filter((r) => r.status === "Day Off").length;
+        const abs = rows.filter((r) => r.status === "Absent").length;
+        const missed = rows.filter((r) => r.recordState === "Not Updated (Missed Clock Out)").length;
+
+        area.innerHTML = `
+          <div class="page-head">
+            <div>
+              <h1>Personal Monthly Attendance ? ${emp.name}</h1>
+              <p>Only completed clock-in &amp; clock-out days count as Good Records; missed clock-outs are not updated</p>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-label">Good Records (In &amp; Out)</div><div class="stat-num" style="color:#16a34a;">${good}</div></div>
+            <div class="stat-card"><div class="stat-label">Days Off</div><div class="stat-num" style="color:#6d28d9;">${off}</div></div>
+            <div class="stat-card"><div class="stat-label">Absent Days</div><div class="stat-num" style="color:#dc2626;">${abs}</div></div>
+            <div class="stat-card"><div class="stat-label">Missed Clock Out</div><div class="stat-num" style="color:#b45309;">${missed}</div></div>
+          </div>
+          <div class="card">
+            <strong>My Monthly Attendance Log (${state.selectedMonth})</strong>
+            <table>
+              <thead><tr><th>Date</th><th>Day</th><th>Status</th><th>Check In</th><th>Check Out</th><th>Record State</th><th>Site</th></tr></thead>
+              <tbody>
+                ${rows.map((r) => `
+                  <tr>
+                    <td>${r.date}</td><td>${r.dayName}</td>
+                    <td><span class="pill ${r.status === "In Office" ? "pill-green" : r.status === "Day Off" ? "pill-purple" : "pill-red"}">${r.status}</span></td>
+                    <td>${r.timeIn}</td><td>${r.timeOut}</td>
+                    <td><span class="pill ${r.recordState === "Good Record" ? "pill-green" : "pill-amber"}">${r.recordState}</span></td>
+                    <td>${r.site}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+        return;
+      }
+
+      if (nav === "reports") {
+        reconcileMissedClockOuts();
+        const daysCount = countInclusiveDays(state.reportStartDate, state.reportEndDate);
+        const rows = state.monthlyAttendance.filter((r) => r.date >= state.appliedStartDate && r.date <= state.appliedEndDate);
+
+        area.innerHTML = `
+          <div class="page-head">
+            <div>
+              <h1>Employee Attendance Reports</h1>
+              <p>Click Generate Report to update the list with the latest employee clock-in and clock-out records</p>
+            </div>
+          </div>
+          <div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div class="form-inline" style="margin-top:0;">
+              <div>
+                <div style="font-size:12px; font-weight:600; margin-bottom:4px;">Quick Date</div>
+                <button type="button" class="btn-white" onclick="setTodayReportRange()">Today (${state.currentDateStr})</button>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:600; margin-bottom:4px;">From Date</div>
+                <input type="date" id="reportFromInput" value="${state.reportStartDate}" />
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:600; margin-bottom:4px;">To Date</div>
+                <input type="date" id="reportToInput" value="${state.reportEndDate}" />
+              </div>
+              <div style="align-self:flex-end;">
+                <button type="button" class="btn-green" onclick="generateReportView()">Generate Report</button>
+                <button type="button" class="btn-purple" onclick="exportReportXls()">Download Excel (.xls)</button>
+              </div>
+            </div>
+            <div style="border:1px solid #e5e7eb; border-radius:6px; padding:12px 20px; text-align:center;">
+              <div style="font-size:12px; color:#6b7280;">Selected Days Count</div>
+              <div style="font-size:20px; font-weight:700; color:#4f46e5;">${daysCount}</div>
+              <div style="font-size:11px; color:#6b7280;">day(s) selected</div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <strong>Employee Clock In &amp; Clock Out Report (${state.appliedStartDate} to ${state.appliedEndDate} ? ${rows.length} records)</strong>
+              <span style="font-size:12px; color:#16a34a; font-weight:600;">${state.reportStatusMessage}</span>
+            </div>
+            <table>
+              <thead><tr><th>Employee</th><th>Role</th><th>Date</th><th>Status</th><th>Check In</th><th>Check Out</th><th>Record State</th><th>Site / Mode</th></tr></thead>
+              <tbody>
+                ${rows.map((r) => {
+                  const person = state.employees.find((e) => e.id === r.employeeId) || { name: "Employee", role: "" };
+                  return `<tr>
+                    <td><strong>${person.name}</strong></td><td>${person.role}</td><td>${r.date}</td>
+                    <td><span class="pill pill-green">${r.status}</span></td><td>${r.timeIn}</td><td>${r.timeOut}</td>
+                    <td><span class="pill ${r.recordState === "Good Record" ? "pill-green" : "pill-amber"}">${r.recordState}</span></td>
+                    <td>${r.site}</td>
+                  </tr>`;
+                }).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+        return;
+      }
+
+      if (nav === "settings") {
+        area.innerHTML = `
+          <div class="page-head">
+            <div>
+              <h1>Portal Settings &amp; Access Control</h1>
+              <p>Portal Controller controls ? Attendance guardrails, biometric gate rules, leave routing, and export preferences</p>
+            </div>
+          </div>
+          ${state.settingsSavedNotice ? `<div class="alert-ok">${state.settingsSavedNotice}</div>` : ""}
+          <div class="card">
+            <strong>Portal Controller &amp; Access Policy</strong>
+            <div style="font-size:12px; color:#6b7280; margin-top:4px;">Lerato Dlamini is the Portal Controller with full access; all other employees only access Dashboard and Leave Management unless granted/requested</div>
+            <div style="margin-top:12px;">
+              ${state.employees.map((e) => `<span class="policy-chip"><strong>${e.name}:</strong> ${e.id === 1 ? '<span style="color:#6d28d9;">Portal Controller (All Access)</span>' : "Dashboard & Leave (Request for Others)"}</span>`).join("")}
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="card">
+              <strong>Clock-In &amp; Clock-Out Rules</strong>
+              <div class="toggle-row">
+                <label class="switch"><input type="checkbox" ${state.settings.singleClockInPerDay ? "checked" : ""} onchange="toggleSettingKey('singleClockInPerDay')" /><span class="slider"></span></label>
+                <span><strong>Limit to one Clock In per day (next day required)</strong></span>
+              </div>
+              <div class="toggle-row">
+                <label class="switch"><input type="checkbox" ${state.settings.requireClockOutForGoodRecord ? "checked" : ""} onchange="toggleSettingKey('requireClockOutForGoodRecord')" /><span class="slider"></span></label>
+                <span><strong>Require Clock Out before day-end for a Good Record</strong></span>
+              </div>
+            </div>
+            <div class="card">
+              <strong>Security &amp; Biometric Webhook</strong>
+              <div class="field" style="margin-top:10px;"><label>Device Webhook Endpoint</label><input type="text" value="${state.settings.biometricWebhookUrl}" readonly /></div>
+              <div class="toggle-row">
+                <label class="switch"><input type="checkbox" ${state.settings.requirePasskeyAfterLogin ? "checked" : ""} onchange="toggleSettingKey('requirePasskeyAfterLogin')" /><span class="slider"></span></label>
+                <span><strong>Require Pass Key confirmation after email &amp; password login</strong></span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderScreens() {
+      const authScreen = document.getElementById("authScreen");
+      const passkeyScreen = document.getElementById("passkeyScreen");
+      const portalShell = document.getElementById("portalShell");
+      const acct = currentAccount();
+      const emp = loggedInEmployee();
+
+      document.getElementById("avatarBtn").textContent = (emp.name || "L").charAt(0).toUpperCase();
+      document.getElementById("sidebarRoleLabel").textContent = isLeratoController()
+        ? "Controller: Full Access & Settings"
+        : "Employee: Dashboard & Leave";
+
+      if (!acct) {
+        authScreen.style.display = "flex";
+        passkeyScreen.style.display = "none";
+        portalShell.style.display = "none";
+
+        ["login", "signup", "confirm"].forEach((m) => {
+          document.getElementById("tab-" + m).classList.toggle("active", state.authMode === m);
+          document.getElementById("form-" + m).style.display = state.authMode === m ? "block" : "none";
+        });
+        document.getElementById("confirmEmailInput").value = state.pendingConfirmEmail || "";
+        const pending = state.accounts.find((a) => a.email.toLowerCase() === (state.pendingConfirmEmail || "").toLowerCase());
+        if (pending && !document.getElementById("confirmCodeInput").value) {
+          document.getElementById("confirmCodeInput").value = pending.confirmationCode;
+        }
+
+        const errBox = document.getElementById("authErrorBox");
+        const okBox = document.getElementById("authSuccessBox");
+        errBox.style.display = state.authError ? "block" : "none";
+        errBox.textContent = state.authError;
+        okBox.style.display = state.authSuccess ? "block" : "none";
+        okBox.textContent = state.authSuccess;
+        return;
+      }
+
+      if (state.settings.requirePasskeyAfterLogin && !state.passkeyUnlocked) {
+        authScreen.style.display = "none";
+        passkeyScreen.style.display = "flex";
+        portalShell.style.display = "none";
+        document.getElementById("passkeySubtitle").textContent = `Account: ${acct.email}`;
+        document.getElementById("passkeyHintText").textContent = `Account Pass Key: ${acct.passkeyCode}`;
+        const pkErr = document.getElementById("passkeyErrorBox");
+        pkErr.style.display = state.passkeyError ? "block" : "none";
+        pkErr.textContent = state.passkeyError;
+        return;
+      }
+
+      authScreen.style.display = "none";
+      passkeyScreen.style.display = "none";
+      portalShell.style.display = "flex";
+
+      document.querySelectorAll(".nav-btn").forEach((b) => {
+        b.classList.toggle("active", b.getAttribute("data-nav") === state.activeNav);
+      });
+      renderMainArea();
+      renderDropdown();
+    }
+
+    renderScreens();
   </script>
 </body>
 </html>
