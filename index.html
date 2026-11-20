@@ -3,44 +3,436 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TechNov8 WFM - Odoo OWL Portal</title>
+  <title>TechNov8 WFM — Portal Preview</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f3f4f6; color: #111827; margin: 0; padding: 24px; }
-    .card { max-width: 820px; margin: 0 auto; background: #ffffff; border-radius: 10px; padding: 28px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
-    .header { background: #5b21b6; color: #ffffff; padding: 16px 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-    .btns button { padding: 8px 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .box { margin-top: 20px; padding: 18px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; }
-    .badge { display: inline-block; background: #ede9fe; color: #5b21b6; padding: 4px 10px; border-radius: 999px; font-weight: bold; font-size: 13px; }
-    a.link-btn { display: inline-block; margin-top: 18px; background: #111827; color: #ffffff; padding: 10px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+    .top-bar {
+      background: #714b67;
+      color: #ffffff;
+      height: 46px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+    }
+    .pill-btn {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .pill-btn:hover { background: rgba(255, 255, 255, 0.25); }
+
+    /* Login View */
+    .login-wrap {
+      min-height: calc(100vh - 46px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 460px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 28px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    .login-card h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      color: #111827;
+    }
+    .subtitle {
+      margin: 0 0 18px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .tabs button {
+      background: #ffffff;
+      color: #374151;
+      border: none;
+      padding: 8px 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-right: 1px solid #d1d5db;
+    }
+    .tabs button:last-child { border-right: none; }
+    .tabs button.active {
+      background: #714b67;
+      color: #ffffff;
+    }
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+    .field input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .login-submit {
+      width: 100%;
+      background: #714b67;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .login-submit:hover { background: #5d3c54; }
+    .demo-creds {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+    .demo-creds span { color: #db2777; font-weight: 600; }
+
+    /* Dashboard View */
+    .app-shell {
+      display: none;
+      min-height: calc(100vh - 46px);
+    }
+    .sidebar {
+      width: 220px;
+      background: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      padding: 18px 12px;
+      flex-shrink: 0;
+    }
+    .sidebar-brand { font-weight: 700; font-size: 15px; color: #111827; padding: 0 10px; }
+    .sidebar-role { font-size: 12px; color: #6b7280; padding: 2px 10px 16px; }
+    .nav-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 12px;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #374151;
+      cursor: pointer;
+    }
+    .nav-item.active {
+      background: #714b67;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .main-content {
+      flex: 1;
+      padding: 24px 28px;
+      background: #f9fafb;
+    }
+    .welcome-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .welcome-row h1 { margin: 0; font-size: 20px; color: #111827; }
+    .welcome-row p { margin: 4px 0 0; font-size: 12px; color: #6b7280; }
+    .action-group { display: flex; gap: 8px; }
+    .btn-dark {
+      background: #1f2937;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-light {
+      background: #ffffff;
+      color: #1f2937;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .panel {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .clock-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-green {
+      background: #16a34a;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 16px;
+    }
+    .stat-label { font-size: 12px; color: #6b7280; }
+    .stat-val { font-size: 22px; font-weight: 700; color: #111827; margin: 6px 0 4px; }
+    .stat-sub { font-size: 12px; color: #6b7280; }
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .quick-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 5px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+      cursor: pointer;
+    }
+    .demo-banner {
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 12px;
+      padding: 8px 16px;
+      text-align: center;
+      border-bottom: 1px solid #fde68a;
+    }
+    @media (max-width: 768px) {
+      .app-shell { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e5e7eb; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <strong>TechNov8 WFM — Odoo OWL Module</strong>
-      <div class="btns">
-        <button onclick="showRole('controller')">Portal Controller (Lerato)</button>
-        <button onclick="showRole('employee')">Standard Employee</button>
+  <div class="top-bar">
+    <div class="top-left">
+      <span>⋮⋮⋮</span>
+      <span>TechNov8 WFM</span>
+    </div>
+    <div class="top-right">
+      <span>YourCompany</span>
+      <button class="pill-btn" onclick="toggleView()">Switch Login / Dashboard</button>
+      <a class="pill-btn" style="text-decoration:none;" href="https://github.com/LinconNkavi/technov8-wfm">GitHub Repo</a>
+    </div>
+  </div>
+
+  <div class="demo-banner">
+    Interactive UI Preview of the <strong>technov8_wfm</strong> Odoo OWL Module (click <strong>Log In With Email &amp; Password</strong> or <strong>Switch Login / Dashboard</strong> to explore).
+  </div>
+
+  <!-- Login View -->
+  <div class="login-wrap" id="loginView">
+    <div class="login-card">
+      <h2>TechNov8 Portal</h2>
+      <p class="subtitle">Sign up, confirm your email, and log in with email and password</p>
+
+      <div class="tabs">
+        <button class="active" onclick="setAuthTab(this, 'Log In')">Log In</button>
+        <button onclick="setAuthTab(this, 'Sign Up')">Sign Up</button>
+        <button onclick="setAuthTab(this, 'Confirm Email')">Confirm Email</button>
+      </div>
+
+      <form onsubmit="openDashboard(event)">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="emailInput" placeholder="lerato.dlamini@technov8.co.za" value="lerato.dlamini@technov8.co.za" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="passInput" placeholder="Enter password" value="Password123!" />
+        </div>
+        <button type="submit" class="login-submit" id="authSubmitBtn">Log In With Email &amp; Password</button>
+      </form>
+
+      <div class="demo-creds">
+        Portal Controller: <span>lerato.dlamini@technov8.co.za</span> ? Employee: <span>naledi.mokoena@technov8.co.za / Password123!</span>
       </div>
     </div>
-    <div class="box">
-      <span class="badge" id="roleBadge">Role: Portal Controller (Lerato Dlamini)</span>
-      <p id="roleText">Full access to Dashboard, Leave Management, Attendance Logging, Employees, Reports, and Access Request approvals.</p>
-      <p><strong>Stack:</strong> Odoo OWL components, QWeb XML templates, and role-based access control.</p>
-    </div>
-    <a class="link-btn" href="https://github.com/LinconNkavi/technov8-wfm">View Source Code on GitHub</a>
   </div>
+
+  <!-- Dashboard View -->
+  <div class="app-shell" id="dashboardView">
+    <aside class="sidebar">
+      <div class="sidebar-brand">TechNov8 Portal</div>
+      <div class="sidebar-role">Controller: Full Access &amp; Settings</div>
+      <button class="nav-item active" onclick="selectNav(this, 'Dashboard')">Dashboard</button>
+      <button class="nav-item" onclick="selectNav(this, 'Leave Management')">Leave Management</button>
+      <button class="nav-item" onclick="selectNav(this, 'Employees')">Employees</button>
+      <button class="nav-item" onclick="selectNav(this, 'Attendance')">Attendance</button>
+      <button class="nav-item" onclick="selectNav(this, 'Reports')">Reports</button>
+      <button class="nav-item" onclick="selectNav(this, 'Settings')">Settings</button>
+    </aside>
+
+    <main class="main-content">
+      <div class="welcome-row">
+        <div>
+          <h1 id="sectionTitle">Welcome back, Lerato Dlamini!</h1>
+          <p>2026-11-20 ? Africa/Johannesburg (SAST)</p>
+        </div>
+        <div class="action-group">
+          <button class="btn-dark" onclick="showNotice('Viewing Dashboard')">View Dashboard</button>
+          <button class="btn-light" onclick="showNotice('Viewing My Department and Leave')">My Department and Leave</button>
+        </div>
+      </div>
+
+      <div class="panel clock-card">
+        <div>
+          <strong>Time Tracking (2026-11-20)</strong>
+          <div style="font-size:13px; color:#4b5563; margin-top:4px;">Lerato Dlamini ? Portal Controller &amp; Software Engineer (Sandton)</div>
+          <div style="font-size:12px; color:#6b7280; margin-top:2px;">Today's Status: <strong id="clockStatus">Not Clocked In Yet</strong></div>
+        </div>
+        <button class="btn-green" id="clockBtn" onclick="toggleClock()">Clock In</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">Hours Today</div>
+          <div class="stat-val" id="hoursVal">0h</div>
+          <div class="stat-sub">Working time</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Leave Balance</div>
+          <div class="stat-val">18</div>
+          <div class="stat-sub">Days remaining</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Good Records</div>
+          <div class="stat-val">3</div>
+          <div class="stat-sub">Completed clock-in &amp; out</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Portal Role</div>
+          <div class="stat-val" style="font-size:18px;">Portal Controller</div>
+          <div class="stat-sub">All Access</div>
+        </div>
+      </div>
+
+      <div class="bottom-grid">
+        <div class="panel">
+          <strong style="display:block; margin-bottom:4px;">Recent Activity</strong>
+          <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Your latest actions and updates</div>
+          <p style="font-size:13px; margin:8px 0;"><strong>Clocked in</strong><br /><span style="color:#6b7280; font-size:12px;">09:00 AM ? Sandton Gate</span></p>
+          <p style="font-size:13px; margin:8px 0;"><strong>Leave request approved</strong><br /><span style="color:#6b7280; font-size:12px;">Yesterday ? Annual Leave</span></p>
+          <p style="font-size:13px; margin:8px 0;"><strong>Facial terminal check synced</strong><br /><span style="color:#6b7280; font-size:12px;">2 days ago ? Office Biometric</span></p>
+        </div>
+
+        <div class="panel">
+          <strong style="display:block; margin-bottom:4px;">Quick Actions</strong>
+          <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Common tasks and shortcuts</div>
+          <button class="quick-btn" onclick="showNotice('Request Leave workflow opened')">Request Leave</button>
+          <button class="quick-btn" onclick="showNotice('Attendance access workflow opened')">Attendance (Request Access if Needed)</button>
+          <button class="quick-btn" onclick="showNotice('Team Directory access workflow opened')">Team Directory (Request Access if Needed)</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
   <script>
-    function showRole(role) {
-      const badge = document.getElementById('roleBadge');
-      const text = document.getElementById('roleText');
-      if (role === 'controller') {
-        badge.textContent = 'Role: Portal Controller (Lerato Dlamini)';
-        text.textContent = 'Full access to Dashboard, Leave Management, Attendance Logging, Employees, Reports, and Access Request approvals.';
+    let clockedIn = false;
+    function setAuthTab(btn, label) {
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('authSubmitBtn').textContent = label + ' With Email & Password';
+    }
+    function openDashboard(e) {
+      e.preventDefault();
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('dashboardView').style.display = 'flex';
+    }
+    function toggleView() {
+      const login = document.getElementById('loginView');
+      const dash = document.getElementById('dashboardView');
+      if (login.style.display === 'none') {
+        login.style.display = 'flex';
+        dash.style.display = 'none';
       } else {
-        badge.textContent = 'Role: Standard Employee';
-        text.textContent = 'Direct access to Dashboard and Leave Management; other tabs show Denied Access with a Request Access workflow.';
+        login.style.display = 'none';
+        dash.style.display = 'flex';
       }
+    }
+    function selectNav(btn, name) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('sectionTitle').textContent = name === 'Dashboard'
+        ? 'Welcome back, Lerato Dlamini!'
+        : name;
+    }
+    function toggleClock() {
+      clockedIn = !clockedIn;
+      document.getElementById('clockStatus').textContent = clockedIn ? 'Clocked In' : 'Not Clocked In Yet';
+      document.getElementById('clockBtn').textContent = clockedIn ? 'Clock Out' : 'Clock In';
+      document.getElementById('hoursVal').textContent = clockedIn ? '1h' : '0h';
+    }
+    function showNotice(msg) {
+      alert(msg + ' (Interactive preview on GitHub Pages)');
     }
   </script>
 </body>
