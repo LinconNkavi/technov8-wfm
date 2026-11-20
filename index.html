@@ -3,12 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TechNov8 Workforce Management Portal</title>
+  <title>TechNov8 WFM - Odoo OWL Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f3f4f6; color: #111827; margin: 0; padding: 24px; }
+    .card { max-width: 820px; margin: 0 auto; background: #ffffff; border-radius: 10px; padding: 28px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+    .header { background: #5b21b6; color: #ffffff; padding: 16px 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .btns button { padding: 8px 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .box { margin-top: 20px; padding: 18px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; }
+    .badge { display: inline-block; background: #ede9fe; color: #5b21b6; padding: 4px 10px; border-radius: 999px; font-weight: bold; font-size: 13px; }
+    a.link-btn { display: inline-block; margin-top: 18px; background: #111827; color: #ffffff; padding: 10px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+  </style>
 </head>
 <body>
-  <h1>TechNov8 Workforce Management (Odoo OWL Module)</h1>
-  <p>Portal Controller: Lerato Dlamini (full access across all sections and settings).</p>
-  <p>Other employees have direct access to Dashboard and Leave Management, and see Denied Access with a Request Access workflow for other sections.</p>
-  <p><a href="https://github.com/LinconNkavi/technov8-wfm">View Repository Code on GitHub</a></p>
+  <div class="card">
+    <div class="header">
+      <strong>TechNov8 WFM — Odoo OWL Module</strong>
+      <div class="btns">
+        <button onclick="showRole('controller')">Portal Controller (Lerato)</button>
+        <button onclick="showRole('employee')">Standard Employee</button>
+      </div>
+    </div>
+    <div class="box">
+      <span class="badge" id="roleBadge">Role: Portal Controller (Lerato Dlamini)</span>
+      <p id="roleText">Full access to Dashboard, Leave Management, Attendance Logging, Employees, Reports, and Access Request approvals.</p>
+      <p><strong>Stack:</strong> Odoo OWL components, QWeb XML templates, and role-based access control.</p>
+    </div>
+    <a class="link-btn" href="https://github.com/LinconNkavi/technov8-wfm">View Source Code on GitHub</a>
+  </div>
+  <script>
+    function showRole(role) {
+      const badge = document.getElementById('roleBadge');
+      const text = document.getElementById('roleText');
+      if (role === 'controller') {
+        badge.textContent = 'Role: Portal Controller (Lerato Dlamini)';
+        text.textContent = 'Full access to Dashboard, Leave Management, Attendance Logging, Employees, Reports, and Access Request approvals.';
+      } else {
+        badge.textContent = 'Role: Standard Employee';
+        text.textContent = 'Direct access to Dashboard and Leave Management; other tabs show Denied Access with a Request Access workflow.';
+      }
+    }
+  </script>
 </body>
 </html>
