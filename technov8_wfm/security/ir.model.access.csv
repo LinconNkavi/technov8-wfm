@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_technov8_attendance_log_user,technov8.attendance.log.user,model_technov8_attendance_log,base.group_user,1,1,1,0
+access_technov8_leave_request_user,technov8.leave.request.user,model_technov8_leave_request,base.group_user,1,1,1,0

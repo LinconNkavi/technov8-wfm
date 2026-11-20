@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_technov8_wfm_dashboard" model="ir.actions.client">
+        <field name="name">TechNov8 WFM</field>
+        <field name="tag">technov8_wfm.dashboard</field>
+    </record>
+
+    <menuitem id="menu_technov8_wfm_root"
+              name="TechNov8 WFM"
+              action="action_technov8_wfm_dashboard"
+              web_icon="hr,static/description/icon.png"
+              sequence="1"/>
+
+    <function model="technov8.attendance.log" name="_restrict_app_switcher_menus"/>
+</odoo>

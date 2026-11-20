@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<record id="view_technov8_attendance_log_list" model="ir.ui.view">
+    <field name="name">technov8.attendance.log.list</field>
+    <field name="model">technov8.attendance.log</field>
+    <field name="arch" type="xml">
+        <list string="Gate and Remote Attendance">
+            <field name="scan_time"/>
+            <field name="employee_id"/>
+            <field name="department_id"/>
+            <field name="site_location"/>
+            <field name="scan_direction"/>
+            <field name="schedule_flag"/>
+        </list>
+    </field>
+</record>
+
+<record id="view_technov8_attendance_log_form" model="ir.ui.view">
+    <field name="name">technov8.attendance.log.form</field>
+    <field name="model">technov8.attendance.log</field>
+    <field name="arch" type="xml">
+        <form string="Attendance Event">
+            <sheet>
+                <group>
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="scan_time"/>
+                    <field name="site_location"/>
+                    <field name="scan_direction"/>
+                    <field name="schedule_flag" readonly="1"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="action_technov8_attendance_log" model="ir.actions.act_window">
+    <field name="name">Attendance Log</field>
+    <field name="res_model">technov8.attendance.log</field>
+    <field name="view_mode">list,form</field>
+</record>
+
+<record id="view_technov8_leave_request_list" model="ir.ui.view">
+    <field name="name">technov8.leave.request.list</field>
+    <field name="model">technov8.leave.request</field>
+    <field name="arch" type="xml">
+        <list string="Leave Requests">
+            <field name="name"/>
+            <field name="employee_id"/>
+            <field name="department_id"/>
+            <field name="leave_type"/>
+            <field name="days"/>
+            <field name="approval_stage"/>
+        </list>
+    </field>
+</record>
+
+<record id="view_technov8_leave_request_form" model="ir.ui.view">
+    <field name="name">technov8.leave.request.form</field>
+    <field name="model">technov8.leave.request</field>
+    <field name="arch" type="xml">
+        <form string="Leave Request">
+            <header>
+                <button name="action_specialist_approve" string="Specialist Approve" type="object"
+                        invisible="approval_stage != 'pending_specialist'" class="btn-primary"/>
+                <button name="action_manager_approve" string="Line Manager Approve" type="object"
+                        invisible="approval_stage != 'pending_manager'" class="btn-primary"/>
+                <field name="approval_stage" widget="statusbar" statusbar_visible="pending_specialist,pending_manager,approved"/>
+            </header>
+            <sheet>
+                <group>
+                    <field name="name" readonly="1"/>
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="leave_type"/>
+                    <field name="days"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="action_technov8_leave_request" model="ir.actions.act_window">
+    <field name="name">Leave Requests</field>
+    <field name="res_model">technov8.leave.request</field>
+    <field name="view_mode">list,form</field>
+</record>
+
+<menuitem id="menu_technov8_wfm_root" name="TechNov8 WFM" sequence="25"/>
+<menuitem id="menu_technov8_attendance" name="Attendance Log" parent="menu_technov8_wfm_root"
+          action="action_technov8_attendance_log" sequence="10"/>
+<menuitem id="menu_technov8_leave" name="Leave Approvals" parent="menu_technov8_wfm_root"
+          action="action_technov8_leave_request" sequence="20"/>
+</odoo>
